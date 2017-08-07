@@ -15,14 +15,12 @@ import com.brewerydb.api.request.brewery.GetBreweryRequest;
 import com.brewerydb.api.request.feature.GetFeaturesRequest;
 import com.brewerydb.api.request.hop.GetHopsRequest;
 import com.brewerydb.api.request.ingredient.GetIngredientsRequest;
-import com.brewerydb.api.result.hop.GetHopResult;
-import com.brewerydb.api.result.hop.GetHopsResult;
-import com.brewerydb.api.result.beer.GetRandomBeerResult;
 import com.brewerydb.api.result.Result;
 import com.brewerydb.api.result.beer.AddBeerResult;
 import com.brewerydb.api.result.beer.DeleteBeerResult;
 import com.brewerydb.api.result.beer.GetBeerResult;
 import com.brewerydb.api.result.beer.GetBeersResult;
+import com.brewerydb.api.result.beer.GetRandomBeerResult;
 import com.brewerydb.api.result.beer.UpdateBeerResult;
 import com.brewerydb.api.result.brewery.GetBreweriesResult;
 import com.brewerydb.api.result.brewery.GetBreweryResult;
@@ -32,6 +30,8 @@ import com.brewerydb.api.result.feature.FeaturedResult;
 import com.brewerydb.api.result.feature.FeaturesResult;
 import com.brewerydb.api.result.glass.GetGlassResult;
 import com.brewerydb.api.result.glass.GetGlassesResult;
+import com.brewerydb.api.result.hop.GetHopResult;
+import com.brewerydb.api.result.hop.GetHopsResult;
 import com.brewerydb.api.result.ingredient.GetIngredientResult;
 import com.brewerydb.api.result.ingredient.GetIngredientsResult;
 import com.brewerydb.api.result.style.GetStyleResult;
@@ -450,6 +450,7 @@ public class BreweryDBClient {
 
     /**
      * Returns a glass by ID.
+     *
      * @param id The ID of the glass to retrieve.
      */
     public GetGlassResult getGlass(Integer id) {
@@ -482,6 +483,7 @@ public class BreweryDBClient {
 
     /**
      * Returns a list of {@link com.brewerydb.api.model.Hop Hops} by page.
+     *
      * @param request The filter for this request.
      */
     public GetHopsResult getHops(GetHopsRequest request) {
@@ -497,6 +499,7 @@ public class BreweryDBClient {
 
     /**
      * Returns a {@link com.brewerydb.api.model.Hop} by ID.
+     *
      * @param id The ID of the hop to return.
      */
     public GetHopResult getHop(Integer id) {
@@ -515,6 +518,7 @@ public class BreweryDBClient {
 
     /**
      * Returns a list of {@link com.brewerydb.api.model.Ingredient Ingredients} by page.
+     *
      * @param request The filter for this request.
      * @return The {@link Result} containing the list of ingredients.
      */
@@ -531,6 +535,7 @@ public class BreweryDBClient {
 
     /**
      * Retrieves an {@link com.brewerydb.api.model.Ingredient} by its ID.
+     *
      * @param id The ID of the ingredient to retrieve.
      * @return The {@link Result} with the ingredient.
      */
@@ -584,9 +589,9 @@ public class BreweryDBClient {
         }
 
         builder
-            .setFollowRedirects(true)
-            .addQueryParam("key", apiKey)
-            .addQueryParam("format", "json");
+                .setFollowRedirects(true)
+                .addQueryParam("key", apiKey)
+                .addQueryParam("format", "json");
 
         if (method == RequestMethod.GET) {
             if (request != null) {
@@ -616,7 +621,7 @@ public class BreweryDBClient {
             public T onCompleted(Response response) throws Exception {
                 LOGGER.debug("Rate limit remaining: {}" + response.getHeader(RATELIMIT_REMAINING_HEADER));
 
-                T result = gson.fromJson(response.getContentType(), clazz);
+                T result = gson.fromJson(response.getResponseBody(), clazz);
                 validateResult(result);
                 return result;
             }
